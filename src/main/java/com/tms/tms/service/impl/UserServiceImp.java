@@ -32,7 +32,7 @@ public class UserServiceImp implements UserService {
     public String getUserRole(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + email))
-                .getRole();
+                .getRole().name();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class UserServiceImp implements UserService {
                 .email(user.getEmail())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
-                .role(user.getRole())
+                .role(user.getRole().name())
                 .build();
     }
 
@@ -67,7 +67,7 @@ public class UserServiceImp implements UserService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(request.getPassword())
-                .role(request.getRole())
+                .role(UserEntity.Role.valueOf(request.getRole().toUpperCase()))
                 .build();
     }
 }

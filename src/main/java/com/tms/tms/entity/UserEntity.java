@@ -49,7 +49,7 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
@@ -69,7 +69,7 @@ public class UserEntity {
     private Set<ProjectEntity> joinedProjects;
 
     public enum Role {
-        ROLE_USER, ROLE_ADMIN
+        ROLE_USER
     }
 
 }

@@ -45,11 +45,11 @@ public class TaskEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private Status status;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String priority;
+    private Priority priority;
 
     @Column(name = "due_date")
     private LocalDateTime dueDate;
