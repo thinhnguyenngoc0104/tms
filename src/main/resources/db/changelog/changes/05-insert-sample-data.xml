@@ -7,55 +7,83 @@
 
     <changeSet id="5" author="thinhnn7">
         
+        <!-- Users -->
         <insert tableName="users">
-            <column name="id" valueNumeric="1"/>
-            <column name="name" value="Alice"/>
-            <column name="email" value="alice@example.com"/>
-            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
-            <column name="role" value="ROLE_USER"/>
+            <column name="id" value="1"/>
+            <column name="name" value="Thinh Nguyen"/>
+            <column name="email" value="thinh@gmail.com"/>
+            <column name="role" value="ADMIN"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="users">
             <column name="id" valueNumeric="2"/>
             <column name="name" value="Bob"/>
-            <column name="email" value="bob@example.com"/>
-            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
-            <column name="role" value="ROLE_USER"/>
+            <column name="email" value="bob@gmail.com"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="users">
             <column name="id" valueNumeric="3"/>
             <column name="name" value="Charlie"/>
-            <column name="email" value="charlie@example.com"/>
-            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
-            <column name="role" value="ROLE_USER"/>
+            <column name="email" value="charlie@gmail.com"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="users">
             <column name="id" valueNumeric="4"/>
             <column name="name" value="David"/>
-            <column name="email" value="david@example.com"/>
-            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
-            <column name="role" value="ROLE_USER"/>
+            <column name="email" value="david@gmail.com"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="users">
             <column name="id" valueNumeric="5"/>
             <column name="name" value="Eve"/>
-            <column name="email" value="eve@example.com"/>
-            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
-            <column name="role" value="ROLE_USER"/>
+            <column name="email" value="eve@gmail.com"/>
+            <column name="role" value="USER"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
 
+        <!-- Projects -->
         <insert tableName="projects">
             <column name="id" valueNumeric="1"/>
-            <column name="name" value="Project Alpha"/>
-            <column name="description" value="First project"/>
+            <column name="name" value="NovaSync"/>
+            <column name="description" value="A cloud-based collaboration platform for remote teams"/>
             <column name="owner_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="projects">
             <column name="id" valueNumeric="2"/>
-            <column name="name" value="Project Beta"/>
-            <column name="description" value="Second project"/>
+            <column name="name" value="QuantumFlow"/>
+            <column name="description" value="An AI-driven workflow automation tool"/>
             <column name="owner_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
-
+        <insert tableName="projects">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="GrowEasy"/>
+            <column name="description" value="A CRM solution for small businesses to streamline customer engagement"/>
+            <column name="owner_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="projects">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="DataPulse"/>
+            <column name="description" value="A real-time analytics dashboard for business insights"/>
+            <column name="owner_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        
+        <!-- Project Members -->
         <insert tableName="project_members">
             <column name="project_id" valueNumeric="1"/>
             <column name="user_id" valueNumeric="3"/>
@@ -65,6 +93,10 @@
             <column name="user_id" valueNumeric="4"/>
         </insert>
         <insert tableName="project_members">
+            <column name="project_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="project_members">
             <column name="project_id" valueNumeric="2"/>
             <column name="user_id" valueNumeric="4"/>
         </insert>
@@ -72,81 +104,306 @@
             <column name="project_id" valueNumeric="2"/>
             <column name="user_id" valueNumeric="5"/>
         </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="4"/>
+            <column name="user_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="4"/>
+            <column name="user_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="4"/>
+            <column name="user_id" valueNumeric="5"/>
+        </insert>
 
+        <!-- Tasks -->
+        <!-- Project 1: NovaSync (Cloud-based collaboration platform) -->
         <insert tableName="tasks">
             <column name="id" valueNumeric="1"/>
-            <column name="title" value="Task 1"/>
-            <column name="description" value="Task 1"/>
-            <column name="status" value="TODO"/>
+            <column name="title" value="Implement user authentication"/>
+            <column name="description" value="Set up OAuth2 for secure user login"/>
+            <column name="status" value="DOING"/>
             <column name="priority" value="HIGH"/>
             <column name="assignee_id" valueNumeric="3"/>
             <column name="project_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="tasks">
             <column name="id" valueNumeric="2"/>
-            <column name="title" value="Task 2"/>
-            <column name="description" value="Task 2"/>
-            <column name="status" value="DOING"/>
+            <column name="title" value="Design team dashboard"/>
+            <column name="description" value="Create UI for team collaboration dashboard"/>
+            <column name="status" value="TODO"/>
             <column name="priority" value="MEDIUM"/>
             <column name="assignee_id" valueNumeric="3"/>
             <column name="project_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="tasks">
             <column name="id" valueNumeric="3"/>
-            <column name="title" value="Task 3"/>
-            <column name="description" value="Task 3"/>
+            <column name="title" value="Set up real-time chat"/>
+            <column name="description" value="Integrate WebSocket for live messaging"/>
+            <column name="status" value="DONE"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="4"/>
+            <column name="project_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="4"/>
+            <column name="title" value="Add file sharing feature"/>
+            <column name="description" value="Enable secure file uploads and sharing"/>
             <column name="status" value="TODO"/>
             <column name="priority" value="LOW"/>
             <column name="assignee_id" valueNumeric="4"/>
             <column name="project_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="tasks">
-            <column name="id" valueNumeric="4"/>
-            <column name="title" value="Task 4"/>
-            <column name="description" value="Task 4"/>
+            <column name="id" valueNumeric="9"/>
+            <column name="title" value="Optimize API performance"/>
+            <column name="description" value="Improve response time for collaboration endpoints"/>
             <column name="status" value="DOING"/>
             <column name="priority" value="MEDIUM"/>
-            <column name="assignee_id" valueNumeric="4"/>
+            <column name="assignee_id" valueNumeric="2"/>
             <column name="project_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="tasks">
+            <column name="id" valueNumeric="10"/>
+            <column name="title" value="Test notification system"/>
+            <column name="description" value="Ensure push notifications work across devices"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="2"/>
+            <column name="project_id" valueNumeric="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Project 2: QuantumFlow (AI-driven workflow automation) -->
+        <insert tableName="tasks">
             <column name="id" valueNumeric="5"/>
-            <column name="title" value="Task 5"/>
-            <column name="description" value="Task 5"/>
+            <column name="title" value="Develop AI task scheduler"/>
+            <column name="description" value="Implement AI algorithm for task prioritization"/>
             <column name="status" value="TODO"/>
             <column name="priority" value="HIGH"/>
             <column name="assignee_id" valueNumeric="4"/>
             <column name="project_id" valueNumeric="2"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
-
         <insert tableName="tasks">
             <column name="id" valueNumeric="6"/>
-            <column name="title" value="Task 6"/>
-            <column name="description" value="Task 6"/>
+            <column name="title" value="Integrate third-party APIs"/>
+            <column name="description" value="Connect with external tools for automation"/>
             <column name="status" value="DOING"/>
             <column name="priority" value="MEDIUM"/>
             <column name="assignee_id" valueNumeric="4"/>
             <column name="project_id" valueNumeric="2"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
-
         <insert tableName="tasks">
             <column name="id" valueNumeric="7"/>
-            <column name="title" value="Task 7"/>
-            <column name="description" value="Task 7"/>
-            <column name="status" value="DOING"/>
+            <column name="title" value="Create workflow templates"/>
+            <column name="description" value="Design reusable workflow templates for users"/>
+            <column name="status" value="DONE"/>
+            <column name="priority" value="LOW"/>
+            <column name="assignee_id" valueNumeric="5"/>
+            <column name="project_id" valueNumeric="2"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="8"/>
+            <column name="title" value="Test automation triggers"/>
+            <column name="description" value="Verify triggers for automated workflows"/>
+            <column name="status" value="TODO"/>
             <column name="priority" value="MEDIUM"/>
             <column name="assignee_id" valueNumeric="5"/>
             <column name="project_id" valueNumeric="2"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
-
         <insert tableName="tasks">
-            <column name="id" valueNumeric="8"/>
-            <column name="title" value="Task 8"/>
-            <column name="description" value="Task 8"/>            
+            <column name="id" valueNumeric="11"/>
+            <column name="title" value="Build user onboarding flow"/>
+            <column name="description" value="Create guided setup for new users"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="3"/>
+            <column name="project_id" valueNumeric="2"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="12"/>
+            <column name="title" value="Optimize database queries"/>
+            <column name="description" value="Improve performance of workflow data retrieval"/>
             <column name="status" value="TODO"/>
             <column name="priority" value="LOW"/>
-            <column name="assignee_id" valueNumeric="5"/>            
-            <column name="project_id" valueNumeric="2"/>            
+            <column name="assignee_id" valueNumeric="3"/>
+            <column name="project_id" valueNumeric="2"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Project 3: GrowEasy (CRM for small businesses) -->
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="13"/>
+            <column name="title" value="Design customer dashboard"/>
+            <column name="description" value="Create UI for customer data visualization"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="2"/>
+            <column name="project_id" valueNumeric="3"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="14"/>
+            <column name="title" value="Implement lead tracking"/>
+            <column name="description" value="Add functionality to track sales leads"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="MEDIUM"/>
+            <column name="assignee_id" valueNumeric="2"/>
+            <column name="project_id" valueNumeric="3"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="15"/>
+            <column name="title" value="Set up email campaigns"/>
+            <column name="description" value="Integrate email marketing tools"/>
+            <column name="status" value="DONE"/>
+            <column name="priority" value="LOW"/>
+            <column name="assignee_id" valueNumeric="3"/>
+            <column name="project_id" valueNumeric="3"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="16"/>
+            <column name="title" value="Add contact import feature"/>
+            <column name="description" value="Enable bulk import of customer contacts"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="3"/>
+            <column name="project_id" valueNumeric="3"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="17"/>
+            <column name="title" value="Test CRM integrations"/>
+            <column name="description" value="Verify compatibility with third-party apps"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="MEDIUM"/>
+            <column name="assignee_id" valueNumeric="5"/>
+            <column name="project_id" valueNumeric="3"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="18"/>
+            <column name="title" value="Optimize search functionality"/>
+            <column name="description" value="Improve search performance for customer data"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="LOW"/>
+            <column name="assignee_id" valueNumeric="5"/>
+            <column name="project_id" valueNumeric="3"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Project 4: DataPulse (Real-time analytics dashboard) -->
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="19"/>
+            <column name="title" value="Design analytics dashboard"/>
+            <column name="description" value="Create UI for real-time data visualization"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="2"/>
+            <column name="project_id" valueNumeric="4"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="20"/>
+            <column name="title" value="Integrate data sources"/>
+            <column name="description" value="Connect dashboard to external data APIs"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="MEDIUM"/>
+            <column name="assignee_id" valueNumeric="2"/>
+            <column name="project_id" valueNumeric="4"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="21"/>
+            <column name="title" value="Implement chart widgets"/>
+            <column name="description" value="Add interactive charts for data insights"/>
+            <column name="status" value="DONE"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="4"/>
+            <column name="project_id" valueNumeric="4"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="22"/>
+            <column name="title" value="Set up real-time updates"/>
+            <column name="description" value="Enable live data streaming for dashboard"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="LOW"/>
+            <column name="assignee_id" valueNumeric="4"/>
+            <column name="project_id" valueNumeric="4"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="23"/>
+            <column name="title" value="Test dashboard performance"/>
+            <column name="description" value="Ensure smooth rendering of large datasets"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="MEDIUM"/>
+            <column name="assignee_id" valueNumeric="5"/>
+            <column name="project_id" valueNumeric="4"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="24"/>
+            <column name="title" value="Add export functionality"/>
+            <column name="description" value="Enable data export to CSV/PDF formats"/>
+            <column name="status" value="DONE"/>
+            <column name="priority" value="LOW"/>
+            <column name="assignee_id" valueNumeric="5"/>
+            <column name="project_id" valueNumeric="4"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

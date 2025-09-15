@@ -7,7 +7,7 @@
 
     <changeSet id="3" author="thinhnn7">
         <createTable tableName="tasks">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="title" type="VARCHAR(255)">
@@ -21,7 +21,13 @@
                 <constraints nullable="false"/>
             </column>
             <column name="assignee_id" type="BIGINT"/>            
-            <column name="project_id" type="BIGINT"/>            
+            <column name="project_id" type="BIGINT"/>       
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>     
         </createTable>
 
         <addForeignKeyConstraint 
