@@ -7,29 +7,14 @@
 
     <changeSet id="2" author="thinhnn7">
         <createTable tableName="projects">
-            <column name="id" type="BIGSERIAL">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-
-            <column name="project_id" type="VARCHAR(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-
             <column name="description" type="TEXT"/>
-
             <column name="owner_id" type="BIGINT"/>
-
-            <column name="created_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-
-            <column name="updated_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
 
         <addForeignKeyConstraint 

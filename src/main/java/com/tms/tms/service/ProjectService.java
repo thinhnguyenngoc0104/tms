@@ -8,9 +8,9 @@ import com.tms.tms.io.ProjectResponse;
 public interface ProjectService {
     ProjectResponse add(ProjectRequest request);
 
-    ProjectResponse update(ProjectRequest request, String projectId);
+    ProjectResponse update(ProjectRequest request, Long id);
 
     List<ProjectResponse> read();
 
-    void delete(String projectId);
+    void delete(Long id);
 }

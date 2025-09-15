@@ -9,4 +9,5 @@
     <include file="db/changelog/changes/02-create-project-table.xml"/>
     <include file="db/changelog/changes/03-create-task-table.xml"/>
     <include file="db/changelog/changes/04-create-project_member-table.xml"/>
+    <include file="db/changelog/changes/05-insert-sample-data.xml"/>
 </databaseChangeLog>

@@ -7,40 +7,21 @@
 
     <changeSet id="3" author="thinhnn7">
         <createTable tableName="tasks">
-            <column name="id" type="BIGSERIAL">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-
-            <column name="task_id" type="VARCHAR(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-
             <column name="title" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-
             <column name="description" type="TEXT"/>
-
             <column name="status" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-
             <column name="priority" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="due_date" type="TIMESTAMP"/>
-
-            <column name="assignee_id" type="BIGINT"/>
-            <column name="project_id" type="BIGINT"/>
-
-            <column name="created_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-
-            <column name="updated_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="assignee_id" type="BIGINT"/>            
+            <column name="project_id" type="BIGINT"/>            
         </createTable>
 
         <addForeignKeyConstraint 

@@ -9,5 +9,5 @@ import com.tms.tms.entity.TaskEntity;
 
 @Repository
 public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
-    Optional<TaskEntity> findByTaskId(String taskId);
+    Optional<TaskEntity> findById(Long id);
 }

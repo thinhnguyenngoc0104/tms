@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="5" author="thinhnn7">
+        
+        <insert tableName="users">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Alice"/>
+            <column name="email" value="alice@example.com"/>
+            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
+            <column name="role" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Bob"/>
+            <column name="email" value="bob@example.com"/>
+            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
+            <column name="role" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Charlie"/>
+            <column name="email" value="charlie@example.com"/>
+            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
+            <column name="role" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="David"/>
+            <column name="email" value="david@example.com"/>
+            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
+            <column name="role" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="5"/>
+            <column name="name" value="Eve"/>
+            <column name="email" value="eve@example.com"/>
+            <column name="password" value="$2a$10$mc5y2ZDWfzINNbeICc0Cs.aKadvKBcIusYcVZ0h/.b8kOpbxLJdEa"/>
+            <column name="role" value="ROLE_USER"/>
+        </insert>
+
+        <insert tableName="projects">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Project Alpha"/>
+            <column name="description" value="First project"/>
+            <column name="owner_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="projects">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Project Beta"/>
+            <column name="description" value="Second project"/>
+            <column name="owner_id" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="project_members">
+            <column name="project_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="5"/>
+        </insert>
+
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="1"/>
+            <column name="title" value="Task 1"/>
+            <column name="description" value="Task 1"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="3"/>
+            <column name="project_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="2"/>
+            <column name="title" value="Task 2"/>
+            <column name="description" value="Task 2"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="MEDIUM"/>
+            <column name="assignee_id" valueNumeric="3"/>
+            <column name="project_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="3"/>
+            <column name="title" value="Task 3"/>
+            <column name="description" value="Task 3"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="LOW"/>
+            <column name="assignee_id" valueNumeric="4"/>
+            <column name="project_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="4"/>
+            <column name="title" value="Task 4"/>
+            <column name="description" value="Task 4"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="MEDIUM"/>
+            <column name="assignee_id" valueNumeric="4"/>
+            <column name="project_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="5"/>
+            <column name="title" value="Task 5"/>
+            <column name="description" value="Task 5"/>
+            <column name="status" value="TODO"/>
+            <column name="priority" value="HIGH"/>
+            <column name="assignee_id" valueNumeric="4"/>
+            <column name="project_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="6"/>
+            <column name="title" value="Task 6"/>
+            <column name="description" value="Task 6"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="MEDIUM"/>
+            <column name="assignee_id" valueNumeric="4"/>
+            <column name="project_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="7"/>
+            <column name="title" value="Task 7"/>
+            <column name="description" value="Task 7"/>
+            <column name="status" value="DOING"/>
+            <column name="priority" value="MEDIUM"/>
+            <column name="assignee_id" valueNumeric="5"/>
+            <column name="project_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="tasks">
+            <column name="id" valueNumeric="8"/>
+            <column name="title" value="Task 8"/>
+            <column name="description" value="Task 8"/>            
+            <column name="status" value="TODO"/>
+            <column name="priority" value="LOW"/>
+            <column name="assignee_id" valueNumeric="5"/>            
+            <column name="project_id" valueNumeric="2"/>            
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -1,6 +1,5 @@
 package com.tms.tms.io;
 
-import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +15,6 @@ public class TaskRequest {
     private String description;
     private String status;
     private String priority;
-    private LocalDateTime dueDate;
-    private String assigneeId;
-    private String projectId;
+    private Long assigneeId;
+    private Long projectId;
 }

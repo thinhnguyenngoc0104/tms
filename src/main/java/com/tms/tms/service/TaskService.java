@@ -8,9 +8,9 @@ import com.tms.tms.io.TaskResponse;
 public interface TaskService {
     TaskResponse add(TaskRequest request);
 
-    TaskResponse update(TaskRequest request, String taskId);
+    TaskResponse update(TaskRequest request, Long taskId);
 
     List<TaskResponse> read();
 
-    void delete(String itemId);
+    void delete(Long itemId);
 }

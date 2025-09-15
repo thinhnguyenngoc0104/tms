@@ -2,8 +2,8 @@ package com.tms.tms.service.impl;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.tms.tms.entity.UserEntity;
 import com.tms.tms.io.UserRequest;
@@ -19,11 +19,16 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImp implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    @Transactional
     public UserResponse add(UserRequest request) {
         UserEntity user = toEntity(request);
+
+        // Set ID
+        // long counter = userRepository.count() + 1;
+        // user.setUserId("U" + String.format("%03d", counter)); // U001, U002, ...
+
         user = userRepository.save(user);
         return toResponse(user);
     }
@@ -32,11 +37,10 @@ public class UserServiceImp implements UserService {
     public String getUserRole(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + email))
-                .getRole().name();
+                .getRole(); // .getRole().name()
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<UserResponse> read() {
         return userRepository.findAll().stream()
                 .map(this::toResponse)
@@ -44,21 +48,17 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public UserResponse profile(String userId) {
-        return userRepository.findByUserId(userId)
+    public UserResponse profile(Long id) {
+        return userRepository.findById(id)
                 .map(this::toResponse)
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
     }
 
     private UserResponse toResponse(UserEntity user) {
         return UserResponse.builder()
-                .userId(user.getUserId())
                 .name(user.getName())
                 .email(user.getEmail())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .role(user.getRole().name())
+                .role(user.getRole()) // user.getRole().name()
                 .build();
     }
 
@@ -66,8 +66,8 @@ public class UserServiceImp implements UserService {
         return UserEntity.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())
-                .role(UserEntity.Role.valueOf(request.getRole().toUpperCase()))
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(request.getRole()) // UserEntity.Role.valueOf(request.getRole().toUpperCase())
                 .build();
     }
 }

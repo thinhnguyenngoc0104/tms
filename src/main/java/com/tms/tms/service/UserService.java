@@ -9,5 +9,5 @@ public interface UserService {
     UserResponse add(UserRequest request);
     String getUserRole(String email);
     List<UserResponse> read();
-    UserResponse profile(String userId);
+    UserResponse profile(Long id);
 }

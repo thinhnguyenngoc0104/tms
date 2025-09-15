@@ -3,7 +3,6 @@ package com.tms.tms.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.tms.tms.entity.ProjectEntity;
 import com.tms.tms.entity.TaskEntity;
@@ -27,46 +26,38 @@ public class TaskServiceImpl implements TaskService {
     private final ProjectRepository projectRepository;
 
     @Override
-    @Transactional
     public TaskResponse add(TaskRequest request) {
         TaskEntity task = toEntity(request);
 
         // Find assignee
-        UserEntity assignee = userRepository.findByUserId(request.getAssigneeId())
+        UserEntity assignee = userRepository.findById(request.getAssigneeId())
                 .orElseThrow(() -> new EntityNotFoundException("Assignee not found" + request.getAssigneeId()));
         task.setAssignee(assignee);
 
         // Find assignee
-        ProjectEntity project = projectRepository.findByProjectId(request.getProjectId())
+        ProjectEntity project = projectRepository.findById(request.getProjectId())
                 .orElseThrow(() -> new EntityNotFoundException("Project not found" + request.getProjectId()));
         task.setProject(project);
-
-        // Set ID
-        long counter = taskRepository.count() + 1;
-        task.setTaskId("TASK" + String.format("%04d", counter));
 
         task = taskRepository.save(task);
         return toResponse(task);
     }
 
     @Override
-    @Transactional
-    public TaskResponse update(TaskRequest request, String taskId) {
-        TaskEntity task = taskRepository.findByTaskId(taskId)
+    public TaskResponse update(TaskRequest request, Long taskId) {
+        TaskEntity task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found" + taskId));
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
-        task.setStatus(TaskEntity.Status.valueOf(request.getStatus().toUpperCase()));
-        task.setPriority(TaskEntity.Priority.valueOf(request.getPriority().toUpperCase()));
-        task.setDueDate(request.getDueDate());
-        task.setAssignee(userRepository.findByUserId(request.getAssigneeId())
+        task.setStatus(request.getStatus()); // TaskEntity.Status.valueOf(request.getStatus().toUpperCase())
+        task.setPriority(request.getPriority()); // TaskEntity.Priority.valueOf(request.getPriority().toUpperCase())
+        task.setAssignee(userRepository.findById(request.getAssigneeId())
                 .orElseThrow(() -> new EntityNotFoundException("Assignee not found" + request.getAssigneeId())));
         task = taskRepository.save(task);
         return toResponse(task);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<TaskResponse> read() {
         return taskRepository.findAll().stream()
                 .map(this::toResponse)
@@ -74,23 +65,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @Transactional
-    public void delete(String itemId) {
-        TaskEntity task = taskRepository.findByTaskId(itemId)
+    public void delete(Long itemId) {
+        TaskEntity task = taskRepository.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found: " + itemId));
         taskRepository.delete(task);
     }
 
     private TaskResponse toResponse(TaskEntity task) {
         return TaskResponse.builder()
-                .taskId(task.getTaskId())
                 .title(task.getTitle())
                 .description(task.getDescription())
-                .status(task.getStatus().name())
-                .priority(task.getPriority().name())
-                .dueDate(task.getDueDate())
-                .assigneeId(task.getAssignee().getUserId())
-                .projectId(task.getProject().getProjectId())
+                .status(task.getStatus()) // task.getStatus().name()
+                .priority(task.getPriority()) // task.getPriority().name()
                 .build();
     }
 
@@ -98,9 +84,8 @@ public class TaskServiceImpl implements TaskService {
         return TaskEntity.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
-                .status(TaskEntity.Status.valueOf(request.getStatus().toUpperCase()))
-                .priority(TaskEntity.Priority.valueOf(request.getPriority().toUpperCase()))
-                .dueDate(request.getDueDate())
+                .status(request.getStatus()) // TaskEntity.Status.valueOf(request.getStatus().toUpperCase())
+                .priority(request.getPriority()) // TaskEntity.Priority.valueOf(request.getPriority().toUpperCase())
                 .build();
     }
 

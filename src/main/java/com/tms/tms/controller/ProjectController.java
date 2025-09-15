@@ -39,13 +39,13 @@ public class ProjectController {
 
     @PutMapping("/{projectId}")    
     @ResponseStatus(HttpStatus.OK)
-    public ProjectResponse updateProject(@RequestBody ProjectRequest request, @PathVariable String projectId) {
+    public ProjectResponse updateProject(@RequestBody ProjectRequest request, @PathVariable Long projectId) {
         return projectService.update(request, projectId);
     }
 
     @DeleteMapping("/{projectId}")    
     @ResponseStatus(HttpStatus.OK)
-    public void deleteProject(@PathVariable String projectId) {
+    public void deleteProject(@PathVariable Long projectId) {
         projectService.delete(projectId);
     }
 }

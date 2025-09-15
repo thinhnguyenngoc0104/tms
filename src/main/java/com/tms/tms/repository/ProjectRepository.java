@@ -9,5 +9,5 @@ import com.tms.tms.entity.ProjectEntity;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Long>{
-    Optional<ProjectEntity> findByProjectId(String projectId);
+    Optional<ProjectEntity> findById(Long id);
 }

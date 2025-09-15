@@ -3,7 +3,6 @@ package com.tms.tms.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.tms.tms.entity.ProjectEntity;
 import com.tms.tms.entity.UserEntity;
@@ -24,27 +23,25 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
     public ProjectResponse add(ProjectRequest request) {
         ProjectEntity project = toEntity(request);
         // Find owner
-        UserEntity owner = userRepository.findByUserId(request.getOwnerId())
+        UserEntity owner = userRepository.findById(request.getOwnerId())
                 .orElseThrow(() -> new EntityNotFoundException("Owner not found" + request.getOwnerId()));
         project.setOwner(owner);
 
         // Set ID
-        long counter = projectRepository.count() + 1;
-        project.setProjectId("PROJ" + String.format("%04d", counter));
+        // long counter = projectRepository.count() + 1;
+        // project.setProjectId("P" + String.format("%03d", counter));
 
         project = projectRepository.save(project);
         return toResponse(project);
     }
 
     @Override
-    @Transactional
-    public ProjectResponse update(ProjectRequest request, String projectId) {
-        ProjectEntity project = projectRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("Project not found" + projectId));
+    public ProjectResponse update(ProjectRequest request, Long id) {
+        ProjectEntity project = projectRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Project not found" + id));
         project.setName(request.getName());
         project.setDescription(request.getDescription());
         project = projectRepository.save(project);
@@ -52,7 +49,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ProjectResponse> read() {
         return projectRepository.findAll().stream()
                 .map(this::toResponse)
@@ -60,21 +56,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
-    public void delete(String projectId) {
-        ProjectEntity project = projectRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("Project not found: " + projectId));
+    public void delete(Long id) {
+        ProjectEntity project = projectRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Project not found: " + id));
         projectRepository.delete(project);
     }
 
     private ProjectResponse toResponse(ProjectEntity project) {
         return ProjectResponse.builder()
-                .projectId(project.getProjectId())
                 .name(project.getName())
                 .description(project.getDescription())
-                .ownerId(project.getOwner().getUserId())
-                .createdAt(project.getCreatedAt())
-                .updatedAt(project.getUpdatedAt())
                 .taskCount(project.getTasks().size())
                 .memberCount(project.getMembers().size())
                 .build();

@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class ProjectRequest {
     private String name;
     private String description;
-    private String ownerId;
+    private Long ownerId;
 }
