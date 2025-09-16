@@ -1,6 +1,6 @@
 package com.tms.tms.io;
 
-import java.security.Timestamp;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,10 +8,10 @@ import lombok.Data;
 @Data
 @Builder
 public class UserResponse {
-    private String userId;
+    private Long id;
     private String name;
     private String email;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
     private String role;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

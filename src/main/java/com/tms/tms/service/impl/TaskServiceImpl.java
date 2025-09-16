@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tms.tms.common.mapper.TaskMapper;
 import com.tms.tms.entity.ProjectEntity;
 import com.tms.tms.entity.TaskEntity;
 import com.tms.tms.entity.UserEntity;
@@ -27,7 +28,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponse add(TaskRequest request) {
-        TaskEntity task = toEntity(request);
+        TaskEntity task = TaskMapper.toEntity(request);
 
         // Find assignee
         UserEntity assignee = userRepository.findById(request.getAssigneeId())
@@ -40,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
         task.setProject(project);
 
         task = taskRepository.save(task);
-        return toResponse(task);
+        return TaskMapper.toResponse(task);
     }
 
     @Override
@@ -49,19 +50,35 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Task not found" + taskId));
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
-        task.setStatus(request.getStatus()); // TaskEntity.Status.valueOf(request.getStatus().toUpperCase())
-        task.setPriority(request.getPriority()); // TaskEntity.Priority.valueOf(request.getPriority().toUpperCase())
+        task.setStatus(request.getStatus());
+        task.setPriority(request.getPriority());
         task.setAssignee(userRepository.findById(request.getAssigneeId())
                 .orElseThrow(() -> new EntityNotFoundException("Assignee not found" + request.getAssigneeId())));
         task = taskRepository.save(task);
-        return toResponse(task);
+        return TaskMapper.toResponse(task);
     }
 
     @Override
     public List<TaskResponse> read() {
         return taskRepository.findAll().stream()
-                .map(this::toResponse)
+                .map(TaskMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public TaskResponse findById(Long id) {
+        TaskEntity task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found: " + id));
+        return TaskMapper.toResponse(task);
+    }
+
+    @Override
+    public TaskResponse updateStatus(Long id, String status) {
+        TaskEntity task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found: " + id));
+        task.setStatus(status);
+        task = taskRepository.save(task);
+        return TaskMapper.toResponse(task);
     }
 
     @Override
@@ -70,23 +87,4 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Task not found: " + itemId));
         taskRepository.delete(task);
     }
-
-    private TaskResponse toResponse(TaskEntity task) {
-        return TaskResponse.builder()
-                .title(task.getTitle())
-                .description(task.getDescription())
-                .status(task.getStatus()) // task.getStatus().name()
-                .priority(task.getPriority()) // task.getPriority().name()
-                .build();
-    }
-
-    private TaskEntity toEntity(TaskRequest request) {
-        return TaskEntity.builder()
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .status(request.getStatus()) // TaskEntity.Status.valueOf(request.getStatus().toUpperCase())
-                .priority(request.getPriority()) // TaskEntity.Priority.valueOf(request.getPriority().toUpperCase())
-                .build();
-    }
-
 }

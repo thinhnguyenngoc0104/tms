@@ -10,4 +10,5 @@ public interface UserService {
     String getUserRole(String email);
     List<UserResponse> read();
     UserResponse profile(Long id);
+    UserResponse update(Long id, UserRequest request);
 }

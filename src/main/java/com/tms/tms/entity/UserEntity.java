@@ -1,7 +1,12 @@
 package com.tms.tms.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,9 +35,15 @@ public class UserEntity {
 
     private String email;
 
-    private String password;
-
     private String role;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp    
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "owner")
     private List<ProjectEntity> ownProjects;
@@ -42,9 +53,5 @@ public class UserEntity {
 
     @ManyToMany(mappedBy = "members")
     private List<ProjectEntity> joinedProjects;
-
-    // public enum Role {
-    //     ROLE_USER
-    // }
 
 }
