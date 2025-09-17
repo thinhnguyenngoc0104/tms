@@ -19,32 +19,26 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImp implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserResponse add(UserRequest request) {
-        UserEntity user = UserMapper.toEntity(request);
+        UserEntity user = userMapper.toEntity(request);
         user = userRepository.save(user);
-        return UserMapper.toResponse(user);
-    }
-
-    @Override
-    public String getUserRole(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + email))
-                .getRole();
+        return userMapper.toResponse(user);
     }
 
     @Override
     public List<UserResponse> read() {
         return userRepository.findAll().stream()
-                .map(UserMapper::toResponse)
+                .map(userMapper::toResponse)
                 .toList();
     }
 
     @Override
     public UserResponse profile(Long id) {
         return userRepository.findById(id)
-                .map(UserMapper::toResponse)
+                .map(userMapper::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
     }
 
@@ -55,10 +49,9 @@ public class UserServiceImp implements UserService {
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setRole(request.getRole());
 
         user = userRepository.save(user);
-        return UserMapper.toResponse(user);
+        return userMapper.toResponse(user);
     }
 
 }

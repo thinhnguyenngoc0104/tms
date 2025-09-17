@@ -35,8 +35,6 @@ public class UserEntity {
 
     private String email;
 
-    private String role;
-
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

@@ -7,7 +7,6 @@ import com.tms.tms.io.UserResponse;
 
 public interface UserService {
     UserResponse add(UserRequest request);
-    String getUserRole(String email);
     List<UserResponse> read();
     UserResponse profile(Long id);
     UserResponse update(Long id, UserRequest request);

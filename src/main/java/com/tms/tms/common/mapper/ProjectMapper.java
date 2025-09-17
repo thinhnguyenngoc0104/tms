@@ -1,12 +1,15 @@
 package com.tms.tms.common.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.tms.tms.entity.ProjectEntity;
 import com.tms.tms.io.ProjectRequest;
 import com.tms.tms.io.ProjectResponse;
 import com.tms.tms.io.UserResponse;
 
+@Component
 public class ProjectMapper {
-    public static ProjectResponse toResponse(ProjectEntity project) {
+    public ProjectResponse toResponse(ProjectEntity project) {
         UserResponse owner = null;
         if (project.getOwner() != null) {
             owner = UserResponse.builder()
@@ -27,7 +30,7 @@ public class ProjectMapper {
                 .build();
     }
 
-    public static ProjectEntity toEntity(ProjectRequest request) {
+    public ProjectEntity toEntity(ProjectRequest request) {
         return ProjectEntity.builder()
                 .name(request.getName())
                 .description(request.getDescription())

@@ -12,4 +12,5 @@ public interface TaskService {
     TaskResponse findById(Long id);
     TaskResponse updateStatus(Long id, String status);
     void delete(Long itemId);
+    Long getProjectIdByTaskId(Long taskId);
 }

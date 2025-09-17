@@ -1,12 +1,15 @@
 package com.tms.tms.common.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.tms.tms.entity.TaskEntity;
 import com.tms.tms.io.TaskRequest;
 import com.tms.tms.io.TaskResponse;
 import com.tms.tms.io.UserResponse;
 
+@Component
 public class TaskMapper {
-    public static TaskResponse toResponse(TaskEntity task) {
+    public TaskResponse toResponse(TaskEntity task) {
         UserResponse assignee = null;
         if (task.getAssignee() != null) {
             assignee = UserResponse.builder()
@@ -30,7 +33,7 @@ public class TaskMapper {
                 .build();
     }
 
-    public static TaskEntity toEntity(TaskRequest request) {
+    public TaskEntity toEntity(TaskRequest request) {
         return TaskEntity.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
