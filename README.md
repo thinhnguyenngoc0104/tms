@@ -110,7 +110,7 @@ The application will start on `http://localhost:8080`
 
 ## 📊 API Endpoints
 
-### Authentication
+### Authentication/Registration (All accounts must bypass this endpoint first)
 - `GET /api/auth/profile` - Get current user profile/ Sync to db if not existed
 
 ### User Management
