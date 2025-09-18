@@ -65,12 +65,12 @@ spring.datasource.password=your_password
 
 ### 3. Build the Application
 ```bash
-./mvnw clean compile
+mvnw clean compile
 ```
 
 ### 4. Run the Application
 ```bash
-./mvnw spring-boot:run
+mvnw spring-boot:run
 ```
 
 The application will start on `http://localhost:8080`
