@@ -29,10 +29,10 @@ public class ProjectServiceImpl implements ProjectService {
     private final TaskMapper taskMapper;
 
     @Override
-    public ProjectResponse add(ProjectRequest request) {
+    public ProjectResponse add(ProjectRequest request, Long ownerId) {
         ProjectEntity project = projectMapper.toEntity(request);
         // Find owner
-        UserEntity owner = userRepository.findById(request.getOwnerId())
+        UserEntity owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException("Owner not found" + request.getOwnerId()));
         project.setOwner(owner);
 

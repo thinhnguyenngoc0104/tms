@@ -60,11 +60,8 @@ public class ProjectController {
         // Only admin can create projects
         authorizationService.requireProjectPermission();
 
-        // Set the current authenticated user as the owner
-        if (request.getOwnerId() == null) {
-            request.setOwnerId(authUtil.getCurrentUserId());
-        }
-        return projectService.add(request);
+        // Set the current authenticated user as the owner of the project
+        return projectService.add(request, authUtil.getCurrentUserId());
     }
 
     @PutMapping("/{id}")

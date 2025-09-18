@@ -8,7 +8,7 @@ import com.tms.tms.io.ProjectMemberResponse;
 import com.tms.tms.io.TaskResponse;
 
 public interface ProjectService {
-    ProjectResponse add(ProjectRequest request);
+    ProjectResponse add(ProjectRequest request, Long ownerId);
     ProjectResponse update(ProjectRequest request, Long id);
     List<ProjectResponse> read();
     ProjectResponse findById(Long id);
