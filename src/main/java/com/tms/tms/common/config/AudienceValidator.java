@@ -8,9 +8,6 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
-/**
- * Validates that the JWT contains the expected audience
- */
 public class AudienceValidator implements OAuth2TokenValidator<Jwt> {
     private final String expectedAudience;
 

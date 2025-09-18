@@ -111,7 +111,7 @@ The application will start on `http://localhost:8080`
 ## 📊 API Endpoints
 
 ### Authentication
-- `GET /api/auth/profile` - Get current user profile
+- `GET /api/auth/profile` - Get current user profile/ Sync to db if not existed
 
 ### User Management
 - `GET /api/users` - Get all users

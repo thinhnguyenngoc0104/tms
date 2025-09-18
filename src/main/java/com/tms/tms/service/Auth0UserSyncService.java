@@ -17,11 +17,9 @@ public class Auth0UserSyncService {
     private final UserRepository userRepository;
 
     public UserEntity syncUserFromJwt(Jwt jwt) {
-        // String auth0Id = jwt.getSubject(); // Auth0 user ID  
         String email = jwt.getClaimAsString("https://tms-api/email");
         String name = jwt.getClaimAsString("https://tms-api/name");
 
-        // Log JWT claims for debugging
         // log.info("JWT Claims: {}", jwt.getClaims());
         // log.info("Auth0 ID: {}, Email: {}, Name: {}", auth0Id, email, name);
 

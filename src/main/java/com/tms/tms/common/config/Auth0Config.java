@@ -24,9 +24,12 @@ public class Auth0Config {
     public JwtDecoder jwtDecoder() {
         String issuerUri = String.format("https://%s/", domain);
         
+        //Load JWKS to verify iss
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromIssuerLocation(issuerUri);
 
+        //Check if claims contains aud
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
+        //Check if aud from iss
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 

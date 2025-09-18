@@ -21,13 +21,11 @@ public class Auth0JwtAuthenticationConverter implements Converter<Jwt, AbstractA
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
-        Collection<GrantedAuthority> authorities = extractAuthority(jwt);
+        Collection<GrantedAuthority> authorities = extractAuthorities(jwt);
         return new JwtAuthenticationToken(jwt, authorities);
     }
 
-    // Extract roles from Auth0 token
-    // In custom claims like "https://tms-api/roles"
-    private Collection<GrantedAuthority> extractAuthority(Jwt jwt) {
+    private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
 
         // Get roles from custom namespace
         List<String> roles = jwt.getClaimAsStringList("https://tms-api/roles");
