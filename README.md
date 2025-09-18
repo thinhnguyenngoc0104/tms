@@ -146,7 +146,7 @@ The application uses the following main entities:
 ## 🆘 Support
 
 - Check the Swagger documentation at `/swagger-ui/index.html`
-
+<!-- Dummy change for code review -->
 ---
 
 **Happy Task Managing! 🎉**
