@@ -143,20 +143,9 @@ The application uses the following main entities:
 - **Tasks** - Task information with assignee and project relationships
 - **Project Members** - Many-to-many relationship between users and projects
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
 ## 🆘 Support
 
-For support and questions:
 - Check the Swagger documentation at `/swagger-ui/index.html`
-- Review the authorization rules in `AUTHORIZATION_RULES.md`
-- Ensure your Auth0 configuration is correct
 
 ---
 
