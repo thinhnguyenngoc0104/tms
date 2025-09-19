@@ -3,9 +3,10 @@ package com.tms.tms.controller;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,16 +25,20 @@ public class Auth0Controller {
 
     private final Auth0UserSyncService userSyncService;
     private final AuthorizationService authorizationService;
+    private final JwtDecoder jwtDecoder;
 
     @GetMapping("/profile")
-    public ResponseEntity<UserResponse> getUserProfile(@AuthenticationPrincipal Jwt jwt) {
-        UserEntity user = userSyncService.syncUserFromJwt(jwt);
+    public ResponseEntity<UserResponse> getUserProfile(@RequestHeader("X-ID-Token") String idToken) {
+        Jwt jwtId = jwtDecoder.decode(idToken); // decode ID Token
+        UserEntity user = userSyncService.syncUserFromJwt(jwtId);
 
+        //TODO: Inject mapper
         UserResponse profile = UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .role(authorizationService.isAdmin() ? "ADMIN" : "USER")
+                .pictureUrl(user.getPictureUrl())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
