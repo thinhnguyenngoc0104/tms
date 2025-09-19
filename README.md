@@ -42,7 +42,7 @@ TMS is a modern task management application that allows teams to organize projec
 - **Spring Boot DevTools** - Hot reload and development utilities
 - **Lombok** - Reduce boilerplate code
 
-## 🚀 Setup Instructions
+## 🚀 Setup Instructions (Local Env)
 
 ### Prerequisites
 - Java 17 or higher
@@ -55,13 +55,8 @@ git clone <repository-url>
 cd tms
 ```
 
-### 2. Database Configuration
-Update `src/main/resources/application.properties` with your database credentials:
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/tms_db
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-```
+### 2. Configuration (Contact Owner)
+Update `src/main/resources/application.properties` with database and Auth0 credentials
 
 ### 3. Build the Application
 ```bash
@@ -75,7 +70,7 @@ mvnw spring-boot:run
 
 The application will start on `http://localhost:8080`
 
-## 📚 Usage Guide
+## 📚 Usage Guide (Deploy Env)
 
 ### 1. Get Access Token from Auth0
 - Log in to your Auth0 application
@@ -83,7 +78,7 @@ The application will start on `http://localhost:8080`
 - The token should include the required audience and custom claims
 
 ### 2. Access Swagger UI
-1. Open your browser and navigate to: `http://localhost:8080/swagger-ui/index.html`
+1. Open your browser and navigate to: `https://tms-ojkh.onrender.com/swagger-ui/index.html`
 2. Click the **"Authorize"** button in the top-right corner
 3. Paste your Auth0 access token in the format: `Bearer <your-access-token>`
 4. Click **"Authorize"** to authenticate
@@ -110,10 +105,10 @@ The application will start on `http://localhost:8080`
 
 ## 📊 API Endpoints
 
-### Authentication/Registration (All accounts must bypass this endpoint first)
-- `GET /api/auth/profile` - Get current user profile/ Sync to db if not existed
+### Authentication/Registration (Custom header: X-ID-TOKEN required)
+- `GET /api/auth/profile` - MUST bypass to sync current user profile (Create/Update)
 
-### User Management
+### User Management (Still under consideration for availability)
 - `GET /api/users` - Get all users
 - `GET /api/users/{id}` - Get user by ID
 - `PUT /api/users/{id}` - Update user (ADMIN only)
