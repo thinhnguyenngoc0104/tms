@@ -17,11 +17,12 @@ public class Auth0UserSyncService {
     private final UserRepository userRepository;
 
     public UserEntity syncUserFromJwt(Jwt jwt) {
-        String email = jwt.getClaimAsString("https://tms-api/email");
-        String name = jwt.getClaimAsString("https://tms-api/name");
-
-        // log.info("JWT Claims: {}", jwt.getClaims());
-        // log.info("Auth0 ID: {}, Email: {}, Name: {}", auth0Id, email, name);
+        String email = jwt.getClaimAsString("email");
+        String name = jwt.getClaimAsString("nickname");
+        String sub = jwt.getClaimAsString("sub");
+        String avatar = jwt.getClaimAsString("picture");
+        
+        log.info("JWT Claims: {}", jwt.getClaims());
 
         UserEntity user = userRepository.findByEmail(email).orElse(null);
 

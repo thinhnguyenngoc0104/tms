@@ -86,6 +86,7 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found: " + projectId));
 
+        //TODO: Inject mapper
         return project.getMembers().stream()
                 .map(member -> ProjectMemberResponse.builder()
                         .id(member.getId())
