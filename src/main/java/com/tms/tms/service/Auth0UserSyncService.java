@@ -18,13 +18,15 @@ public class Auth0UserSyncService {
 
     public UserEntity syncUserFromJwt(Jwt jwt) {
         String email = jwt.getClaimAsString("email");
-        String name = jwt.getClaimAsString("nickname");
+        String nickname = jwt.getClaimAsString("nickname");
         String sub = jwt.getClaimAsString("sub");
-        String avatar = jwt.getClaimAsString("picture");
-        
+        String pictureUrl = jwt.getClaimAsString("picture");
+        String name = jwt.getClaimAsString("name");
+        String userName = name == email ? nickname : name;
+
         log.info("JWT Claims: {}", jwt.getClaims());
 
-        UserEntity user = userRepository.findByEmail(email).orElse(null);
+        UserEntity user = userRepository.findBySub(sub).orElse(null);
 
         if (user == null) {
             if (email == null || email.trim().isEmpty()) {
@@ -32,15 +34,27 @@ public class Auth0UserSyncService {
             }
 
             user = UserEntity.builder()
-                    .name(name != null ? name : "Unknown")
+                    .name(userName)
                     .email(email)
+                    .sub(sub)
+                    .pictureUrl(pictureUrl)
                     .build();
             user = userRepository.save(user);
         } else {
             boolean updated = false;
 
-            if (name != null && !name.equals(user.getName()) && !name.equals(email)) {
-                user.setName(name);
+            if (!userName.equals(user.getName()) && userName != null) {
+                user.setName(userName);
+                updated = true;
+            }
+
+            if (!pictureUrl.equals(user.getPictureUrl()) && pictureUrl != null) {
+                user.setPictureUrl(pictureUrl);
+                updated = true;
+            }
+
+            if (!sub.equals(user.getSub()) && sub != null) {
+                user.setSub(sub);
                 updated = true;
             }
 

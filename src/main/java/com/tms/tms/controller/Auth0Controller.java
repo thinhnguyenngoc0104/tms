@@ -38,6 +38,7 @@ public class Auth0Controller {
                 .email(user.getEmail())
                 .name(user.getName())
                 .role(authorizationService.isAdmin() ? "ADMIN" : "USER")
+                .pictureUrl(user.getPictureUrl())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
