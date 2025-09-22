@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component;
 
 import com.tms.tms.entity.UserEntity;
-import com.tms.tms.repository.UserRepository;
+import com.tms.tms.service.Auth0UserSyncService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,16 +15,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthUtil {
 
-    // private final Auth0UserSyncService userSyncService;
-    private final UserRepository userRepository;
+    private final Auth0UserSyncService userSyncService;
 
     public UserEntity getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication instanceof JwtAuthenticationToken jwtAuth) {
             Jwt jwt = jwtAuth.getToken();
-            return userRepository.findBySub(jwt.getClaimAsString("sub"))
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+            return userSyncService.syncUserFromJwt(jwt);
         }
 
         throw new RuntimeException("No authenticated user found");

@@ -11,35 +11,30 @@
         <insert tableName="users">
             <column name="name" value="Thinh Nguyen"/>
             <column name="email" value="thinh@gmail.com"/>
-            <column name="sub" value="auth0|68cba48273486db8486c7834"/>
             <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
             <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="users">
             <column name="name" value="Bob"/>
             <column name="email" value="bob@gmail.com"/>
-            <column name="sub" value="auth0|68ccc6c408378e36db70ccf7"/>
             <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
             <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="users">
             <column name="name" value="Charlie"/>
             <column name="email" value="charlie@gmail.com"/>
-            <column name="sub" value="auth0|68ccc12008378e36db70cb50"/>
             <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
             <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="users">
             <column name="name" value="David"/>
             <column name="email" value="david@gmail.com"/>
-            <column name="sub" value="auth0|68ccc73f08378e36db70cd19"/>
             <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
             <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
         <insert tableName="users">
             <column name="name" value="Eve"/>
             <column name="email" value="eve@gmail.com"/>
-            <column name="sub" value="auth0|68ccc758bee86bab9e4ac953"/>
             <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
             <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>

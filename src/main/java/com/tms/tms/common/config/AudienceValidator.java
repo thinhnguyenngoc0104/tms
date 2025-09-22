@@ -9,28 +9,24 @@ import org.springframework.util.Assert;
 import java.util.List;
 
 public class AudienceValidator implements OAuth2TokenValidator<Jwt> {
-    private final List<String> expectedAudiences;
+    private final String expectedAudience;
 
-    public AudienceValidator(List<String> expectedAudiences) {
-        Assert.notEmpty(expectedAudiences , "expectedAudiences cannot be null or empty");
-        this.expectedAudiences  = expectedAudiences ;
+    public AudienceValidator(String expectedAudience) {
+        Assert.hasText(expectedAudience, "expectedAudience cannot be null or empty");
+        this.expectedAudience = expectedAudience;
     }
 
     @Override
     public OAuth2TokenValidatorResult validate(Jwt jwt) {
         List<String> audiences = jwt.getAudience();
         
-        if (audiences != null) {
-            for (String expected : expectedAudiences) {
-                if (audiences.contains(expected)) {
-                    return OAuth2TokenValidatorResult.success();
-                }
-            }
+        if (audiences != null && audiences.contains(this.expectedAudience)) {
+            return OAuth2TokenValidatorResult.success();
         }
         
         return OAuth2TokenValidatorResult.failure(new OAuth2Error(
             "invalid_audience", 
-            "The required audience is missing. Expected one of: " + expectedAudiences,
+            "The required audience is missing", 
             null
         ));
     }

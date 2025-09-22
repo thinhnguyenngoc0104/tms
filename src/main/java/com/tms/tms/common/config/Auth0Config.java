@@ -1,7 +1,5 @@
 package com.tms.tms.common.config;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +20,6 @@ public class Auth0Config {
     @Value("${auth0.domain}")
     private String domain;
 
-    @Value("${auth0.id-token-audience}")
-    private String idTokenAudience;
-
     @Bean
     public JwtDecoder jwtDecoder() {
         String issuerUri = String.format("https://%s/", domain);
@@ -33,7 +28,7 @@ public class Auth0Config {
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromIssuerLocation(issuerUri);
 
         //Check if claims contains aud
-        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(List.of(audience, idTokenAudience));
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
         //Check if aud from iss
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
