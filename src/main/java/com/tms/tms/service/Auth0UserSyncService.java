@@ -17,16 +17,13 @@ public class Auth0UserSyncService {
     private final UserRepository userRepository;
 
     public UserEntity syncUserFromJwt(Jwt jwt) {
-        String email = jwt.getClaimAsString("email");
-        String nickname = jwt.getClaimAsString("nickname");
-        String sub = jwt.getClaimAsString("sub");
-        String pictureUrl = jwt.getClaimAsString("picture");
-        String name = jwt.getClaimAsString("name");
-        String userName = name == email ? nickname : name;
+        String email = jwt.getClaimAsString("https://tms-api/email");
+        String name = jwt.getClaimAsString("https://tms-api/name");
 
-        log.info("JWT Claims: {}", jwt.getClaims());
+        // log.info("JWT Claims: {}", jwt.getClaims());
+        // log.info("Auth0 ID: {}, Email: {}, Name: {}", auth0Id, email, name);
 
-        UserEntity user = userRepository.findBySub(sub).orElse(null);
+        UserEntity user = userRepository.findByEmail(email).orElse(null);
 
         if (user == null) {
             if (email == null || email.trim().isEmpty()) {
@@ -34,27 +31,15 @@ public class Auth0UserSyncService {
             }
 
             user = UserEntity.builder()
-                    .name(userName)
+                    .name(name != null ? name : "Unknown")
                     .email(email)
-                    .sub(sub)
-                    .pictureUrl(pictureUrl)
                     .build();
             user = userRepository.save(user);
         } else {
             boolean updated = false;
 
-            if (!userName.equals(user.getName()) && userName != null) {
-                user.setName(userName);
-                updated = true;
-            }
-
-            if (!pictureUrl.equals(user.getPictureUrl()) && pictureUrl != null) {
-                user.setPictureUrl(pictureUrl);
-                updated = true;
-            }
-
-            if (!sub.equals(user.getSub()) && sub != null) {
-                user.setSub(sub);
+            if (name != null && !name.equals(user.getName()) && !name.equals(email)) {
+                user.setName(name);
                 updated = true;
             }
 
