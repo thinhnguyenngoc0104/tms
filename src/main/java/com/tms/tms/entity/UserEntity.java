@@ -33,12 +33,9 @@ public class UserEntity {
 
     private String name;
 
-    private String email;
-
-    @Column(name = "picture_url")
-    private String pictureUrl;
-
     private String sub;
+
+    private String role;
 
     @CreationTimestamp
     @Column(name = "created_at")

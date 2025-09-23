@@ -15,7 +15,6 @@ public class TaskMapper {
             assignee = UserResponse.builder()
                     .id(task.getAssignee().getId())
                     .name(task.getAssignee().getName())
-                    .email(task.getAssignee().getEmail())
                     .build();
         }
 

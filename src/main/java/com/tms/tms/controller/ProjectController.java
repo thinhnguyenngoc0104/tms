@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tms.tms.common.util.AuthUtil;
 import com.tms.tms.io.DeleteResponse;
 import com.tms.tms.io.ProjectRequest;
 import com.tms.tms.io.ProjectResponse;
@@ -31,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final AuthUtil authUtil;
     private final AuthorizationService authorizationService;
 
     @GetMapping
@@ -60,8 +58,7 @@ public class ProjectController {
         // Only admin can create projects
         authorizationService.requireProjectPermission();
 
-        // Set the current authenticated user as the owner of the project
-        return projectService.add(request, authUtil.getCurrentUserId());
+        return projectService.add(request);
     }
 
     @PutMapping("/{id}")

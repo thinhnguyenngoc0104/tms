@@ -15,7 +15,6 @@ public class ProjectMapper {
             owner = UserResponse.builder()
                     .id(project.getOwner().getId())
                     .name(project.getOwner().getName())
-                    .email(project.getOwner().getEmail())
                     .build();
         }
 

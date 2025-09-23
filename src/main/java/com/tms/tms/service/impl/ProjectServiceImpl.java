@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tms.tms.common.helper.CurrentUserProvider;
 import com.tms.tms.common.mapper.ProjectMapper;
 import com.tms.tms.common.mapper.TaskMapper;
 import com.tms.tms.entity.ProjectEntity;
@@ -27,13 +28,15 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserRepository userRepository;
     private final ProjectMapper projectMapper;
     private final TaskMapper taskMapper;
+    private final CurrentUserProvider currentUserProvider;
 
     @Override
-    public ProjectResponse add(ProjectRequest request, Long ownerId) {
+    public ProjectResponse add(ProjectRequest request) {
         ProjectEntity project = projectMapper.toEntity(request);
-        // Find owner
-        UserEntity owner = userRepository.findById(ownerId)
-                .orElseThrow(() -> new EntityNotFoundException("Owner not found" + request.getOwnerId()));
+
+        String currentSub = currentUserProvider.getCurrentUserSub();
+        UserEntity owner = userRepository.findBySub(currentSub)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         project.setOwner(owner);
 
         project = projectRepository.save(project);
@@ -86,12 +89,11 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found: " + projectId));
 
-        //TODO: Inject mapper
+        // TODO: Inject mapper
         return project.getMembers().stream()
                 .map(member -> ProjectMemberResponse.builder()
                         .id(member.getId())
                         .name(member.getName())
-                        .email(member.getEmail())
                         .build())
                 .toList();
     }
@@ -124,7 +126,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (!removed) {
             throw new IllegalArgumentException("User is not a member of this project");
         }
-        
+
         project.getTasks().removeIf(task -> task.getAssignee() != null && task.getAssignee().getId().equals(userId));
         projectRepository.save(project);
     }

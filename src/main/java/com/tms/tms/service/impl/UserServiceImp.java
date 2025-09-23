@@ -11,7 +11,6 @@ import com.tms.tms.io.UserResponse;
 import com.tms.tms.repository.UserRepository;
 import com.tms.tms.service.UserService;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,24 +33,4 @@ public class UserServiceImp implements UserService {
                 .map(userMapper::toResponse)
                 .toList();
     }
-
-    @Override
-    public UserResponse profile(Long id) {
-        return userRepository.findById(id)
-                .map(userMapper::toResponse)
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
-    }
-
-    @Override
-    public UserResponse update(Long id, UserRequest request) {
-        UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + id));
-
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-
-        user = userRepository.save(user);
-        return userMapper.toResponse(user);
-    }
-
 }

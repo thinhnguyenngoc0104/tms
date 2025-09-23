@@ -12,16 +12,14 @@ public class UserMapper {
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
-                .email(user.getEmail())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
+                .role(user.getRole())
+                .sub(user.getSub())
                 .build();
     }
 
     public UserEntity toEntity(UserRequest request) {
         return UserEntity.builder()
                 .name(request.getName())
-                .email(request.getEmail())
                 .build();
     }
 }

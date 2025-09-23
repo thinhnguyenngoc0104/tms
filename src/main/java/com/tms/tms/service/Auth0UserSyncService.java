@@ -1,9 +1,15 @@
 package com.tms.tms.service;
 
+import java.util.List;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.tms.tms.entity.UserEntity;
+import com.tms.tms.io.UserResponse;
 import com.tms.tms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,53 +22,58 @@ public class Auth0UserSyncService {
 
     private final UserRepository userRepository;
 
-    public UserEntity syncUserFromJwt(Jwt jwt) {
-        String email = jwt.getClaimAsString("email");
-        String nickname = jwt.getClaimAsString("nickname");
-        String sub = jwt.getClaimAsString("sub");
-        String pictureUrl = jwt.getClaimAsString("picture");
-        String name = jwt.getClaimAsString("name");
-        String userName = name == email ? nickname : name;
-
+    public void syncUserFromJwt(Jwt jwt) {
         log.info("JWT Claims: {}", jwt.getClaims());
+
+        String sub = jwt.getClaimAsString("sub");
+        String name = jwt.getClaimAsString("https://tms-api/name");
+        String role = jwt.getClaimAsStringList("https://tms-api/roles").get(0);
 
         UserEntity user = userRepository.findBySub(sub).orElse(null);
 
         if (user == null) {
-            if (email == null || email.trim().isEmpty()) {
-                throw new IllegalArgumentException("Cannot create user without email. JWT claims: " + jwt.getClaims());
+            if (sub == null || sub.trim().isEmpty()) {
+                throw new IllegalArgumentException("Cannot create user without sub. JWT claims: " + jwt.getClaims());
             }
 
             user = UserEntity.builder()
-                    .name(userName)
-                    .email(email)
+                    .name(name)
                     .sub(sub)
-                    .pictureUrl(pictureUrl)
+                    .role(role)
                     .build();
-            user = userRepository.save(user);
+            userRepository.save(user);
         } else {
             boolean updated = false;
 
-            if (!userName.equals(user.getName()) && userName != null) {
-                user.setName(userName);
+            if (name != null && !name.equals(user.getName())) {
+                user.setName(name);
                 updated = true;
             }
-
-            if (!pictureUrl.equals(user.getPictureUrl()) && pictureUrl != null) {
-                user.setPictureUrl(pictureUrl);
-                updated = true;
-            }
-
-            if (!sub.equals(user.getSub()) && sub != null) {
+            if (sub != null && !sub.equals(user.getSub())) {
                 user.setSub(sub);
                 updated = true;
             }
-
+            if (role != null && !role.equals(user.getRole())) {
+                user.setRole(role);
+                updated = true;
+            }
             if (updated) {
-                user = userRepository.save(user);
+                userRepository.save(user);
             }
         }
 
-        return user;
+        // Lưu DTO vào SecurityContext
+        UserResponse userDto = UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .sub(user.getSub())
+                .role(user.getRole())
+                .build();
+
+        log.info("DTO: {}", userDto.toString());
+
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDto, jwt,
+                List.of(new SimpleGrantedAuthority(user.getRole())));
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 }
