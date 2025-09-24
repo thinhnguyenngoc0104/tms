@@ -27,10 +27,7 @@ public class Auth0Controller {
         if (jwt == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
         userSyncService.syncUserFromJwt(jwt);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build(); // 204
     }
-
 }

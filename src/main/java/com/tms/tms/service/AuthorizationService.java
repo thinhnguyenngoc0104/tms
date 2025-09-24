@@ -1,12 +1,11 @@
 package com.tms.tms.service;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.tms.tms.common.helper.CurrentUserProvider;
-import com.tms.tms.entity.ProjectEntity;
 import com.tms.tms.repository.ProjectRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,7 +23,7 @@ public class AuthorizationService {
     /**
      * Check if current user can access a project
      * Admin: all projects
-     * User: only projects they are members
+     * User: only projects they are owner or members
      */
     public boolean canAccessProject(Long projectId) {
         if (isAdmin()) {
@@ -33,27 +32,16 @@ public class AuthorizationService {
 
         String currentSub = currentUserProvider.getCurrentUserSub();
 
-        ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("Project not found: " + projectId));
-
-        // Check if user is owner
-        if (project.getOwner() != null && project.getOwner().getSub().equals(currentSub)) {
-            return true;
-        }
-        // Check if user is member
-        return project.getMembers().stream()
-                .anyMatch(member -> member.getSub().equals(currentSub));
+        // Check if accessible
+        return projectRepository.existsByIdAndUserHasAccess(projectId, currentSub);
     }
 
     public void requireProjectAccess(Long projectId) {
         if (!canAccessProject(projectId)) {
-            throw new SecurityException("ACCESS DENIED: Owner - Member's privileges required");
-        }
-    }
-
-    public void requireProjectPermission() {
-        if (!isAdmin()) {
-            throw new SecurityException("ACCESS DENIED: Admin's privilege required");
+            throw new AccessDeniedException(
+                "ACCESS DENIED: Owner - Member's privileges required for projectId=" + projectId
+            );
         }
     }
 }
+

@@ -1,18 +1,19 @@
 package com.tms.tms.service.impl;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.tms.tms.common.mapper.TaskMapper;
+import com.tms.tms.common.mapper.AppMapper;
 import com.tms.tms.entity.ProjectEntity;
 import com.tms.tms.entity.TaskEntity;
 import com.tms.tms.entity.UserEntity;
 import com.tms.tms.io.TaskRequest;
 import com.tms.tms.io.TaskResponse;
+import com.tms.tms.io.TaskStatusUpdateRequest;
 import com.tms.tms.repository.ProjectRepository;
 import com.tms.tms.repository.TaskRepository;
 import com.tms.tms.repository.UserRepository;
+import com.tms.tms.service.AuthorizationService;
 import com.tms.tms.service.TaskService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -22,77 +23,87 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
-    private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
-    private final ProjectRepository projectRepository;
-    private final TaskMapper taskMapper;
+        private final TaskRepository taskRepository;
+        private final UserRepository userRepository;
+        private final ProjectRepository projectRepository;
+        private final AppMapper appMapper;
+        private final AuthorizationService authorizationService;
 
-    @Override
-    public TaskResponse add(TaskRequest request) {
-        TaskEntity task = taskMapper.toEntity(request);
+        @Override
+        @Transactional
+        public TaskResponse add(TaskRequest request) {
+                authorizationService.requireProjectAccess(request.getProjectId());
+                TaskEntity task = appMapper.toTaskEntity(request);
 
-        // Find assignee
-        UserEntity assignee = userRepository.findById(request.getAssigneeId())
-                .orElseThrow(() -> new EntityNotFoundException("Assignee not found" + request.getAssigneeId()));
-        task.setAssignee(assignee);
+                // Find assignee
+                UserEntity assignee = getAssigneeOrThrow(request.getAssigneeId());
+                task.setAssignee(assignee);
 
-        // Find assignee
-        ProjectEntity project = projectRepository.findById(request.getProjectId())
-                .orElseThrow(() -> new EntityNotFoundException("Project not found" + request.getProjectId()));
-        task.setProject(project);
+                // Find project
+                ProjectEntity project = getProjectOrThrow(request.getProjectId());
+                task.setProject(project);
 
-        task = taskRepository.save(task);
-        return taskMapper.toResponse(task);
-    }
+                task = taskRepository.save(task);
+                return appMapper.toTaskResponse(task);
+        }
 
-    @Override
-    public TaskResponse update(TaskRequest request, Long taskId) {
-        TaskEntity task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("Task not found" + taskId));
-        task.setTitle(request.getTitle());
-        task.setDescription(request.getDescription());
-        task.setStatus(request.getStatus());
-        task.setPriority(request.getPriority());
-        task.setAssignee(userRepository.findById(request.getAssigneeId())
-                .orElseThrow(() -> new EntityNotFoundException("Assignee not found" + request.getAssigneeId())));
-        task = taskRepository.save(task);
-        return taskMapper.toResponse(task);
-    }
+        @Override
+        @Transactional
+        public TaskResponse update(TaskRequest request, Long taskId) {
+                authorizationService.requireProjectAccess(request.getProjectId());
+                TaskEntity task = getTaskOrThrow(taskId);
 
-    @Override
-    public List<TaskResponse> read() {
-        return taskRepository.findAll().stream()
-                .map(taskMapper::toResponse)
-                .toList();
-    }
+                task.setTitle(request.getTitle());
+                task.setDescription(request.getDescription());
+                task.setStatus(request.getStatus());
+                task.setPriority(request.getPriority());
+                task.setAssignee(getAssigneeOrThrow(request.getAssigneeId()));
 
-    @Override
-    public TaskResponse findById(Long id) {
-        TaskEntity task = taskRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Task not found: " + id));
-        return taskMapper.toResponse(task);
-    }
+                task = taskRepository.save(task);
+                return appMapper.toTaskResponse(task);
+        }
 
-    @Override
-    public TaskResponse updateStatus(Long id, String status) {
-        TaskEntity task = taskRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Task not found: " + id));
-        task.setStatus(status);
-        task = taskRepository.save(task);
-        return taskMapper.toResponse(task);
-    }
+        @Override
+        @Transactional(readOnly = true)
+        public TaskResponse findById(Long id) {
+                TaskEntity task = getTaskOrThrow(id);
+                authorizationService.requireProjectAccess(task.getProject().getId());
+                return appMapper.toTaskResponse(task);
+        }
 
-    @Override
-    public void delete(Long itemId) {
-        TaskEntity task = taskRepository.findById(itemId)
-                .orElseThrow(() -> new EntityNotFoundException("Task not found: " + itemId));
-        taskRepository.delete(task);
-    }
+        @Override
+        @Transactional
+        public TaskResponse updateStatus(Long id, TaskStatusUpdateRequest request) {
+                TaskEntity task = getTaskOrThrow(id);
+                authorizationService.requireProjectAccess(task.getProject().getId());
 
-    @Override
-    public Long getProjectIdByTaskId(Long taskId) {
-        TaskEntity task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("Task not found: " + taskId));
-        return task.getProject().getId();
-    }
+                task.setStatus(request.getStatus());
+
+                task = taskRepository.save(task);
+                return appMapper.toTaskResponse(task);
+        }
+
+        @Override
+        @Transactional
+        public void delete(Long id) {
+                TaskEntity task = getTaskOrThrow(id);
+                authorizationService.requireProjectAccess(task.getProject().getId());
+                taskRepository.delete(task);
+        }
+
+        // --- Helper methods ---
+        private ProjectEntity getProjectOrThrow(Long projectId) {
+                return projectRepository.findById(projectId)
+                                .orElseThrow(() -> new EntityNotFoundException("Project not found: " + projectId));
+        }
+
+        private UserEntity getAssigneeOrThrow(Long userId) {
+                return userRepository.findById(userId)
+                                .orElseThrow(() -> new EntityNotFoundException("Assignee not found: " + userId));
+        }
+
+        private TaskEntity getTaskOrThrow(Long taskId) {
+                return taskRepository.findById(taskId)
+                                .orElseThrow(() -> new EntityNotFoundException("Task not found: " + taskId));
+        }
 }

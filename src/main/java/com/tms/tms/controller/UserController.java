@@ -12,13 +12,13 @@ import com.tms.tms.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping
     public List<UserResponse> fetchUsers() {
         return userService.read();
     }

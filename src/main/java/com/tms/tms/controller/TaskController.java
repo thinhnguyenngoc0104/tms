@@ -12,64 +12,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tms.tms.io.DeleteResponse;
 import com.tms.tms.io.TaskRequest;
 import com.tms.tms.io.TaskResponse;
 import com.tms.tms.io.TaskStatusUpdateRequest;
-import com.tms.tms.service.AuthorizationService;
 import com.tms.tms.service.TaskService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/tasks")
 public class TaskController {
 
     private final TaskService taskService;
-    private final AuthorizationService authorizationService;
 
-    @GetMapping("/tasks/{id}")
+    @GetMapping("/{id}")
     public TaskResponse getTaskById(@PathVariable Long id) {
-        // Check if user can access the project that contains this task
-        Long projectId = taskService.getProjectIdByTaskId(id);
-        authorizationService.requireProjectAccess(projectId);
         return taskService.findById(id);
     }
 
-    @PostMapping("/tasks")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse addTask(@RequestBody TaskRequest request) {
-        // Check if user can modify tasks in the specified project
-        authorizationService.requireProjectAccess(request.getProjectId());
         return taskService.add(request);
     }
 
-    @PutMapping("/tasks/{id}")
+    @PutMapping("/{id}")
     public TaskResponse updateTask(@PathVariable Long id, @RequestBody TaskRequest request) {
-        // Check if user can modify tasks in the project that contains this task
-        Long projectId = taskService.getProjectIdByTaskId(id);
-        authorizationService.requireProjectAccess(projectId);
         return taskService.update(request, id);
     }
 
-    @PatchMapping("/tasks/{id}/status")
+    @PatchMapping("/{id}/status")
     public TaskResponse updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatusUpdateRequest request) {
-        // Check if user can modify tasks in the project that contains this task
-        Long projectId = taskService.getProjectIdByTaskId(id);
-        authorizationService.requireProjectAccess(projectId);
-        return taskService.updateStatus(id, request.getStatus());
+        return taskService.updateStatus(id, request);
     }
 
-    @DeleteMapping("/tasks/{id}")
-    public DeleteResponse deleteTask(@PathVariable Long id) {
-        // Check if user can modify tasks in the project that contains this task
-        Long projectId = taskService.getProjectIdByTaskId(id);
-        authorizationService.requireProjectAccess(projectId);
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTask(@PathVariable Long id) {
         taskService.delete(id);
-        return DeleteResponse.builder()
-                .message("Task deleted successfully")
-                .deletedId(id)
-                .build();
     }
 }
