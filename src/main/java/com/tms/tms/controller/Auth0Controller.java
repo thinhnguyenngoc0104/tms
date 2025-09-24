@@ -23,11 +23,10 @@ public class Auth0Controller {
     private final Auth0UserSyncService userSyncService;
 
     @PostMapping("/sync")
-    public ResponseEntity<Void> syncUser(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<Long> syncUser(@AuthenticationPrincipal Jwt jwt) {
         if (jwt == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        userSyncService.syncUserFromJwt(jwt);
-        return ResponseEntity.noContent().build(); // 204
+        return ResponseEntity.ok(userSyncService.syncUserFromJwt(jwt));
     }
 }

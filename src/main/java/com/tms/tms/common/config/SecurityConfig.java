@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 @EnableConfigurationProperties(CorsProperties.class)
 public class SecurityConfig {
 
-    private final Auth0JwtAuthenticationConverter jwtAuthenticationConverter;
     private final CorsProperties corsProperties;
 
     @Bean
@@ -33,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+                        oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }

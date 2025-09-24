@@ -1,15 +1,9 @@
 package com.tms.tms.service;
 
-import java.util.List;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.tms.tms.entity.UserEntity;
-import com.tms.tms.io.UserResponse;
 import com.tms.tms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +16,7 @@ public class Auth0UserSyncService {
 
     private final UserRepository userRepository;
 
-    public void syncUserFromJwt(Jwt jwt) {
+    public Long syncUserFromJwt(Jwt jwt) {
         log.info("JWT Claims: {}", jwt.getClaims());
 
         String sub = jwt.getClaimAsString("sub");
@@ -62,18 +56,6 @@ public class Auth0UserSyncService {
             }
         }
 
-        // Lưu DTO vào SecurityContext
-        UserResponse userDto = UserResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .sub(user.getSub())
-                .role(user.getRole())
-                .build();
-
-        log.info("DTO: {}", userDto.toString());
-
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDto, jwt,
-                List.of(new SimpleGrantedAuthority(user.getRole())));
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        return user.getId();
     }
 }
