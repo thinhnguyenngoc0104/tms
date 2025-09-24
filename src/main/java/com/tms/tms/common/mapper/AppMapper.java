@@ -9,17 +9,14 @@ import com.tms.tms.io.ProjectRequest;
 import com.tms.tms.io.ProjectResponse;
 import com.tms.tms.io.TaskRequest;
 import com.tms.tms.io.TaskResponse;
-import com.tms.tms.io.UserRequest;
 import com.tms.tms.io.UserResponse;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AppMapper {
 
     // -------------------- User --------------------
-    UserEntity toUserEntity(UserRequest request);
-
     UserResponse toUserResponse(UserEntity entity);
 
     List<UserResponse> toUserResponses(List<UserEntity> entities);
