@@ -55,17 +55,12 @@ git clone <repository-url>
 cd tms
 ```
 
-### 2. Configuration (Contact Owner)
-Update `src/main/resources/application.properties` with database and Auth0 credentials
+### 2. Configuration
+Download application-dev.properties from [.properties](https://drive.google.com/file/d/1Y7-56yfSTj_isYii6pRFJwZeEJ--BHAg/view?usp=drive_link)
 
-### 3. Build the Application
+### 3. Clean & Build the Application
 ```bash
-mvnw clean compile
-```
-
-### 4. Run the Application
-```bash
-mvnw spring-boot:run
+mvnw clean spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 The application will start on `http://localhost:8080`
