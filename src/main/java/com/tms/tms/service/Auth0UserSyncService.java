@@ -22,6 +22,8 @@ public class Auth0UserSyncService {
         String sub = jwt.getClaimAsString("sub");
         String name = jwt.getClaimAsString("https://tms-api/name");
         String role = jwt.getClaimAsStringList("https://tms-api/roles").get(0);
+        String email = jwt.getClaimAsString("https://tms-api/email");
+        String pictureUrl = jwt.getClaimAsString("https://tms-api/pictureUrl");
 
         UserEntity user = userRepository.findBySub(sub).orElse(null);
 
@@ -34,6 +36,8 @@ public class Auth0UserSyncService {
                     .name(name)
                     .sub(sub)
                     .role(role)
+                    .email(email)
+                    .pictureUrl(pictureUrl)
                     .build();
             userRepository.save(user);
         } else {
@@ -49,6 +53,14 @@ public class Auth0UserSyncService {
             }
             if (role != null && !role.equals(user.getRole())) {
                 user.setRole(role);
+                updated = true;
+            }
+            if (email != null && !email.equals(user.getEmail())) {
+                user.setEmail(email);
+                updated = true;
+            }
+            if (pictureUrl != null && !pictureUrl.equals(user.getPictureUrl())) {
+                user.setPictureUrl(pictureUrl);
                 updated = true;
             }
             if (updated) {

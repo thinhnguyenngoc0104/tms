@@ -24,4 +24,10 @@ public class UserServiceImp implements UserService {
     public List<UserResponse> read() {
         return appMapper.toUserResponses(userRepository.findAll());
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponse findById(Long id) {
+        return appMapper.toUserResponse(userRepository.findById(id).orElse(null));
+    }
 }

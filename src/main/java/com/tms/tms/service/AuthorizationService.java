@@ -3,8 +3,8 @@ package com.tms.tms.service;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import com.tms.tms.common.helper.CurrentUserProvider;
 import com.tms.tms.repository.ProjectRepository;
+import com.tms.tms.security.CurrentUserProvider;
 
 import lombok.RequiredArgsConstructor;
 

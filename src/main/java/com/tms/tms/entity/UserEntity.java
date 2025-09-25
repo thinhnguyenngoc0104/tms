@@ -37,6 +37,11 @@ public class UserEntity {
 
     private String role;
 
+    private String email;
+
+    @Column(name = "picture_url")
+    private String pictureUrl;  
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

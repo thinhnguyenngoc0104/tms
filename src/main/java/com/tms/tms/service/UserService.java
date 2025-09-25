@@ -6,4 +6,5 @@ import com.tms.tms.io.UserResponse;
 
 public interface UserService {
     List<UserResponse> read();
+    UserResponse findById(Long id);
 }

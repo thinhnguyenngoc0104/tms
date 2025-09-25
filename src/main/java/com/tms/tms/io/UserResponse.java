@@ -10,4 +10,6 @@ public class UserResponse {
     private String name;
     private String sub;
     private String role;
+    private String email;
+    private String pictureUrl;
 }
