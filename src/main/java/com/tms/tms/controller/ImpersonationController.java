@@ -1,9 +1,10 @@
 package com.tms.tms.controller;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tms.tms.io.UserResponse;
@@ -19,14 +20,14 @@ public class ImpersonationController {
     private final ImpersonationService impersonationService;
 
     @PostMapping("/start/{userId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse startImpersonation(@PathVariable Long userId) {
-        UserResponse res = impersonationService.startImpersonation(userId);
-        return res;
+        return impersonationService.startImpersonation(userId);
     }
 
     @PostMapping("/stop")
-    public ResponseEntity<String> stopImpersonation() {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void stopImpersonation() {
         impersonationService.stopImpersonation();
-        return ResponseEntity.ok("Impersonation stopped");
     }
 }

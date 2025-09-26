@@ -15,11 +15,9 @@ import com.tms.tms.io.UserResponse;
 import com.tms.tms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ImpersonationService {
 
     private final UserRepository userRepository;
@@ -32,9 +30,6 @@ public class ImpersonationService {
         UserEntity user = getUserOrThrow(userId);
         String adminSub = getSubFromAuth();
 
-        log.info("Admin {} starting impersonation of user: {} (ID: {})",
-                adminSub, user.getName(), userId);
-
         // Store the impersonation session
         activeImpersonations.put(adminSub, userId);
 
@@ -45,14 +40,7 @@ public class ImpersonationService {
         String adminSub = getSubFromAuth();
 
         // Remove the impersonation session
-        Long impersonatedUserId = activeImpersonations.remove(adminSub);
-
-        if (impersonatedUserId != null) {
-            log.info("Stopped impersonation for admin: {} (was impersonating user ID: {})",
-                    adminSub, impersonatedUserId);
-        } else {
-            log.info("No active impersonation found for admin: {}", adminSub);
-        }
+        activeImpersonations.remove(adminSub);
     }
 
     public Optional<Long> getImpersonatedUserId(String adminSub) {

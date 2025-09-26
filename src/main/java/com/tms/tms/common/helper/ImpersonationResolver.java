@@ -13,11 +13,9 @@ import com.tms.tms.repository.UserRepository;
 import com.tms.tms.service.ImpersonationService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class ImpersonationResolver {
 
     private final ImpersonationService impersonationService;
@@ -29,9 +27,7 @@ public class ImpersonationResolver {
         return getImpersonatedUser(jwt)
                 .map(UserEntity::getSub)
                 .orElseGet(() -> {
-                    String adminSub = jwt.getClaimAsString("sub");
-                    log.info("Using admin sub {}", adminSub);
-                    return adminSub;
+                    return jwt.getClaimAsString("sub");
                 });
     }
 

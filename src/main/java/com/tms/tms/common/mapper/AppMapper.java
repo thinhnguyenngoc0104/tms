@@ -42,4 +42,8 @@ public interface AppMapper {
     ProjectResponse toProjectResponse(ProjectEntity entity);
 
     List<ProjectResponse> toProjectResponses(List<ProjectEntity> entities);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "sub", ignore = true)
+    void updateUserFromJwt(UserEntity source, @MappingTarget UserEntity target);
 }
