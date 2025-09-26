@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tms.tms.common.helper.EntityResolver;
 import com.tms.tms.common.mapper.AppMapper;
+import com.tms.tms.entity.UserEntity;
 import com.tms.tms.io.UserResponse;
 import com.tms.tms.repository.UserRepository;
 import com.tms.tms.service.UserService;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImp implements UserService {
 
     private final UserRepository userRepository;
+    private final EntityResolver entityResolver;
     private final AppMapper appMapper;
 
     @Override
@@ -28,6 +31,7 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse findById(Long id) {
-        return appMapper.toUserResponse(userRepository.findById(id).orElse(null));
+        UserEntity user = entityResolver.getUserOrThrow(id);
+        return appMapper.toUserResponse(user);
     }
 }
