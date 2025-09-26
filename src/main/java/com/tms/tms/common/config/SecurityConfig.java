@@ -14,6 +14,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+// import com.tms.tms.security.ImpersonationFilter;
+// import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -23,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private final CorsProperties corsProperties;
+    private final Auth0JwtAuthenticationConverter jwtAuthenticationConverter;
+    // private final ImpersonationFilter impersonationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,9 +35,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/impersonation/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/**").authenticated())
                 .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                        oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+                // .addFilterAfter(impersonationFilter, BearerTokenAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }

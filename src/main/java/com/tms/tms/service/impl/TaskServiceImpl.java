@@ -34,11 +34,9 @@ public class TaskServiceImpl implements TaskService {
         public TaskResponse add(TaskRequest request) {
                 authorizationService.requireProjectAccess(request.getProjectId());
                 TaskEntity task = appMapper.toTaskEntity(request);
-
                 // Find assignee
                 UserEntity assignee = getAssigneeOrThrow(request.getAssigneeId());
                 task.setAssignee(assignee);
-
                 // Find project
                 ProjectEntity project = getProjectOrThrow(request.getProjectId());
                 task.setProject(project);
@@ -50,8 +48,8 @@ public class TaskServiceImpl implements TaskService {
         @Override
         @Transactional
         public TaskResponse update(TaskRequest request, Long taskId) {
-                authorizationService.requireProjectAccess(request.getProjectId());
                 TaskEntity task = getTaskOrThrow(taskId);
+                authorizationService.requireProjectAccess(task.getProject().getId());
 
                 task.setTitle(request.getTitle());
                 task.setDescription(request.getDescription());
@@ -59,7 +57,6 @@ public class TaskServiceImpl implements TaskService {
                 task.setPriority(request.getPriority());
                 task.setAssignee(getAssigneeOrThrow(request.getAssigneeId()));
 
-                task = taskRepository.save(task);
                 return appMapper.toTaskResponse(task);
         }
 
@@ -76,10 +73,7 @@ public class TaskServiceImpl implements TaskService {
         public TaskResponse updateStatus(Long id, TaskStatusUpdateRequest request) {
                 TaskEntity task = getTaskOrThrow(id);
                 authorizationService.requireProjectAccess(task.getProject().getId());
-
                 task.setStatus(request.getStatus());
-
-                task = taskRepository.save(task);
                 return appMapper.toTaskResponse(task);
         }
 

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tms.tms.common.helper.CurrentUserProvider;
 import com.tms.tms.common.mapper.AppMapper;
 import com.tms.tms.entity.ProjectEntity;
 import com.tms.tms.entity.TaskEntity;
@@ -17,6 +16,7 @@ import com.tms.tms.io.TaskResponse;
 import com.tms.tms.repository.ProjectRepository;
 import com.tms.tms.repository.TaskRepository;
 import com.tms.tms.repository.UserRepository;
+import com.tms.tms.security.CurrentUserProvider;
 import com.tms.tms.service.AuthorizationService;
 import com.tms.tms.service.ProjectService;
 
@@ -51,7 +51,6 @@ public class ProjectServiceImpl implements ProjectService {
                 ProjectEntity project = getProjectOrThrow(id);
                 project.setName(request.getName());
                 project.setDescription(request.getDescription());
-                project = projectRepository.save(project);
                 return appMapper.toProjectResponse(project);
         }
 
@@ -61,7 +60,6 @@ public class ProjectServiceImpl implements ProjectService {
                 List<ProjectEntity> projects = authorizationService.isAdmin()
                                 ? projectRepository.findAll()
                                 : projectRepository.findAllByUserAccess(currentUserProvider.getCurrentUserSub());
-
                 return appMapper.toProjectResponses(projects);
         }
 
@@ -107,7 +105,6 @@ public class ProjectServiceImpl implements ProjectService {
                 UserEntity user = getUserOrThrow(userId);
                 validateMember(project, userId);
                 project.getMembers().add(user);
-                projectRepository.save(project);
         }
 
         @Override
@@ -117,7 +114,6 @@ public class ProjectServiceImpl implements ProjectService {
                 validateMember(project, userId);
                 project.getTasks().removeIf(
                                 task -> task.getAssignee() != null && task.getAssignee().getId().equals(userId));
-                projectRepository.save(project);
         }
 
         // --- Helper methods ---
