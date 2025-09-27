@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="3" author="thinhnn7">
+        <createTable tableName="tasks">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assignee_id" type="BIGINT"/>            
+            <column name="project_id" type="BIGINT"/>       
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>     
+        </createTable>
+
+        <addForeignKeyConstraint 
+            baseTableName="tasks"
+            baseColumnNames="assignee_id"
+            constraintName="fk_tasks_assignee"
+            referencedTableName="users"
+            referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint 
+            baseTableName="tasks"
+            baseColumnNames="project_id"
+            constraintName="fk_tasks_project"
+            referencedTableName="projects"
+            referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
